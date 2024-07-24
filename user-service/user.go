@@ -11,6 +11,7 @@ type IUserService interface {
 	Create(CreateUser) error
 	GetAll() ([]User, error)
 	GetById(string) (User, error)
+	GetByEmail(string) (User, error)
 }
 
 type CreateUser struct {

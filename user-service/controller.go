@@ -62,8 +62,26 @@ func (u *UserController) getById(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (u *UserController) getByEmail(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	email := vars["email"]
+
+	user, err := u.userService.GetByEmail(email)
+	if err != nil {
+		http.Error(w, "User not found", http.StatusNotFound)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(user); err != nil {
+		http.Error(w, "Error encoding response", http.StatusInternalServerError)
+		return
+	}
+}
+
 func (u *UserController) RegisterRoutes(r *mux.Router) {
 	r.HandleFunc("/users", u.create).Methods("POST")
 	r.HandleFunc("/users", u.getAll).Methods("GET")
 	r.HandleFunc("/users/{id}", u.getById).Methods("GET")
+	r.HandleFunc("/users/email/{email}", u.getByEmail).Methods("GET")
 }

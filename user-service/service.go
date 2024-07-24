@@ -19,3 +19,7 @@ func (us *UserService) GetAll() ([]User, error) {
 func (us *UserService) GetById(id string) (User, error) {
 	return us.userRepository.FindById(id)
 }
+
+func (us *UserService) GetByEmail(email string) (User, error) {
+	return us.userRepository.FindByEmail(email)
+}

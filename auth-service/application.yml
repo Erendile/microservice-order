@@ -1,0 +1,5 @@
+local:
+  server:
+    port: "8081"
+  redis:
+    addr: "localhost:6379"

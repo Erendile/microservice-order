@@ -63,3 +63,18 @@ func (r *PostgresRepository) FindById(id string) (User, error) {
 
 	return user, nil
 }
+
+func (r *PostgresRepository) FindByEmail(email string) (User, error) {
+	query := `SELECT id, name, email, password FROM users WHERE email = $1`
+	row := r.db.QueryRow(query, email)
+
+	var user User
+	if err := row.Scan(&user.ID, &user.Name, &user.Email, &user.Password); err != nil {
+		if err == sql.ErrNoRows {
+			return User{}, fmt.Errorf("user not found: %w", err)
+		}
+		return User{}, fmt.Errorf("failed to find user by email: %w", err)
+	}
+
+	return user, nil
+}
